@@ -1,6 +1,3 @@
-以下是一个简单的 `README.md` 文件示例，描述了你的 Rust 项目及其功能。
-
-
 # Rclone Backup Script
 
 This Rust project is a script to synchronize files using `rclone` and send a summary of the operation to a Lark webhook.
