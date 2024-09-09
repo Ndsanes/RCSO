@@ -54,6 +54,3 @@ cargo run
 ## License
 
 This project is licensed under the MIT License.
-```
-
-This `README.md` file provides an overview of the project, its prerequisites, configuration, usage, and dependencies. Adjust the content as needed to better fit your project's specifics.
