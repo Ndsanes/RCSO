@@ -45,8 +45,6 @@ cargo run
 
 - `config`: For reading the configuration file.
 - `regex`: For parsing the `rclone` output.
-- `reqwest`: For sending HTTP requests.
-- `serde_json`: For constructing JSON payloads.
 
 ## License
 
