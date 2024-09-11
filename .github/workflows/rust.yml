@@ -1,4 +1,4 @@
-name: Build and Release
+name: Build then Release
 
 on:
   push:
@@ -41,17 +41,11 @@ jobs:
       with:
         name: sync.exe
 
-    - name: Create Tag
-      id: create_tag
-      run: |
-        TAG_NAME=release
-        git tag $TAG_NAME
-        git push origin $TAG_NAME
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2.0.8
       with:
         files: sync.exe
-        tag_name: ${{ steps.create_tag.outputs.TAG_NAME }}
+        tag_name: release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
