@@ -39,7 +39,7 @@ fn main() {
         pause().unwrap();
         exit(2);
     } else if !std::path::Path::new("rclone.exe").exists() {
-        eprintln!("我草！rclone.exe不存在！麻烦你安一下rclone！安了的话请你把rclone放在本程序所在的目录下！！！");
+        eprintln!("我草！rclone.exe不存在！请你安一下rclone！安了的话请你把rclone放在本程序所在的目录下！！！");
         pause().unwrap();
         exit(3);
     }
