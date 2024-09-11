@@ -1,57 +1,46 @@
-name: Rust
+name: Build and Release
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
-env:
-  CARGO_TERM_COLOR: always
+    branches:
+      - master
 
 jobs:
-  build-and-release:
-
+  build:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        target: x86_64-pc-windows-msvc
 
     - name: Build
       run: cargo build --release
 
-    # Step to set up the environment for using 'gh' (GitHub CLI)
-    - name: Set up GitHub CLI
-      uses: actions/setup-node@v3
+    - name: Upload sync.exe
+      uses: actions/upload-artifact@v2
       with:
-        node-version: '16' # GitHub CLI is bundled with Node.js
+        name: sync.exe
+        path: target/release/sync.exe
 
-    # Install GitHub CLI
-    - run: npm install -g gh
+  release:
+    needs: build
+    runs-on: windows-latest
 
-    # Authenticate GitHub CLI
-    - name: Authenticate with GitHub
-      run: gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}
+    steps:
+    - name: Download sync.exe
+      uses: actions/download-artifact@v2
+      with:
+        name: sync.exe
 
-    # Create a release
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2.0.8
+      with:
+        files: sync.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-
-    # Upload built artifact to the release
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./target/release/sync.exe
-        asset_name: sync.exe
-        asset_content_type: application/octet-stream
