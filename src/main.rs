@@ -7,7 +7,7 @@ fn main() {
     println!("正在开始同步……");
     // 检查配置文件是否存在
     if !std::path::Path::new("setting.toml").exists() {
-        println!("哎我草！配置文件不存在！等等嗷，老子尝试新建一个 setting.toml 文件……");
+        println!("哎我草！配置文件不存在！等等嗷，正在尝试新建一个 setting.toml 文件……");
         std::fs::write(
             "setting.toml",
             br#"
