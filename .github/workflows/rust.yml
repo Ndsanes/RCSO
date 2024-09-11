@@ -33,14 +33,25 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: Download sync.exe
       uses: actions/download-artifact@v2
       with:
         name: sync.exe
 
+    - name: Create Tag
+      id: create_tag
+      run: |
+        TAG_NAME=release
+        git tag $TAG_NAME
+        git push origin $TAG_NAME
+
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2.0.8
       with:
         files: sync.exe
+        tag_name: ${{ steps.create_tag.outputs.TAG_NAME }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
