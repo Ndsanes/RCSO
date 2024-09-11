@@ -10,11 +10,48 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  build-and-release:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Build
-      run: cargo build --verbose
+      run: cargo build --release
+
+    # Step to set up the environment for using 'gh' (GitHub CLI)
+    - name: Set up GitHub CLI
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16' # GitHub CLI is bundled with Node.js
+
+    # Install GitHub CLI
+    - run: npm install -g gh
+
+    # Authenticate GitHub CLI
+    - name: Authenticate with GitHub
+      run: gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}
+
+    # Create a release
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    # Upload built artifact to the release
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./target/release/sync.exe
+        asset_name: sync.exe
+        asset_content_type: application/octet-stream
