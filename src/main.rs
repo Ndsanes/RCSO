@@ -19,7 +19,7 @@ fn main() {
             webhook = "https://open.feishu.cn/open-apis/bot/v2/hook/xxxxxx"
             "#,
         ).unwrap();
-        println!("嘀嘀嘀！！配置文件已生成，请修改配置文件后重新运行程序！！");
+        println!("嘀嘀嘀！！！配置文件已生成，请修改配置文件后重新运行程序……");
         pause().unwrap();
         exit(1);
     } else {
