@@ -71,17 +71,16 @@ fn main() {
 
     let status = child.wait().expect("Failed to wait on child");
     if status.success() {
-        // 获取最后10行
         let num_lines = 10;
         let start = if lines.len() > num_lines { lines.len() - num_lines } else { 0 };
         let last_lines = &lines[start..];
-        // 正则匹配
+        // 正则
         let re_transferred = Regex::new(r"Transferred:\s+(\d+\.?\d* \w+) / (\d+\.?\d* \w+),").unwrap();
         let re_checks = Regex::new(r"Checks:\s+(\d+) / (\d+), (\d+)%").unwrap();
         let re_deleted = Regex::new(r"Deleted:\s+(\d+) \(files\), (\d+) \(dirs\), (\d+\.?\d* \w+) \(freed\)").unwrap();
         let re_transferred_simple = Regex::new(r"Transferred:\s+(\d+) / (\d+), (\d+)%").unwrap();
         let re_elapsed = Regex::new(r"Elapsed time:\s+(\d+m\d+\.?\d*s)").unwrap();
-        // 匹配结果
+        // 匹配
         let mut transferred: Option<String> = None;
         let mut checks: Option<String> = None;
         let mut deleted: Option<String> = None;
